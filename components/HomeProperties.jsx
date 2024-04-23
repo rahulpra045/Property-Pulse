@@ -1,8 +1,29 @@
-import properties from "@/properties.json";
+'use client'
+import { useEffect, useState } from 'react';
+
+import { fetchProperties } from '@/utils/requests';
 import { PropertyCard } from "@/components/PropertyCard";
 import Link from "next/link";
 
-export const HomeProperties = () => {
+
+export const HomeProperties = async () => {
+//  const properties = await  fetchProperties();
+ 
+  const [properties, setProperties] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchProperties();
+        setProperties(data);
+      } catch (error) {
+        // Handle error here
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const recentProperties = properties
     .sort(() => Math.random() - Math.random())
     .slice(0, 3);
